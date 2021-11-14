@@ -16,8 +16,7 @@ Caster::Caster()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    window = SDL_CreateWindow("WIP RAYCASTER", SDL_WINDOWPOS_UNDEFINED,
-        SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow("WIP RAYCASTER", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
 }
@@ -39,14 +38,15 @@ while (SDL_PollEvent(&event)) {
 
 void Caster::clr_scrn()
 {
-    SDL_SetRenderDrawColor(renderer,85,107,47,255);
-
+    SDL_SetRenderDrawColor(renderer,255,0,0,255);
     SDL_RenderClear(renderer);
+
 }
 
 void Caster::sdl_present()
 {
     SDL_RenderPresent(renderer);
+
 
 }
 
@@ -119,7 +119,7 @@ void Caster::cast_rays(){
 
     double ray_x;
     double ray_y;
-    for(int r = 0; r < 60; r++){
+    for(int r = 0; r < 600; r+= 10){
         bool w_hit = false;
         ray_x = pl.x;
         ray_y = pl.y;
@@ -138,12 +138,34 @@ void Caster::cast_rays(){
         }while(!w_hit);
 
         SDL_RenderDrawLine(renderer,pl.x,pl.y,ray_x,ray_y);
+
+        double w_dist = sqrt((ray_x - pl.x) * (ray_x - pl.x) + (ray_y - pl.y) * (ray_y - pl.y));
+
+        double a_diff = pa - ray_a;
+        if(a_diff < 0) a_diff += 2 * M_PI;
+        if(a_diff > 0) a_diff -= 2 * M_PI;
+
+        w_dist = w_dist * cos(a_diff);
+
+
+        double l_height = (GRID_S * SCREEN_H) / w_dist;
+        if(l_height > SCREEN_H) l_height = SCREEN_H;
+
+        int x_o = ((SCREEN_H / 2) - l_height / 2) + 200;
+        int y_o = (GRID_H * GRID_S) + 25;
+        SDL_SetRenderDrawColor(renderer,0,255,0,255);
+
+        for(int i = 0; i < 10; i++){
+            SDL_RenderDrawLine(renderer, r + i + x_o, y_o, r + i + x_o, l_height + y_o);
+        }
         ray_a += M_PI / 180;
+
     }
 
 
 
 }
+
 
 void Caster::free(){
     SDL_DestroyRenderer(renderer);

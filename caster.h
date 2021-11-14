@@ -10,8 +10,8 @@ public:
     static const unsigned char GRID_H = 8;
     static const unsigned char GRID_W = 8;
     static const int GRID_S = 75;
-    static const  int SCREEN_H = 480;
-    static const  int SCREEN_W = 640;
+    static const  int SCREEN_H = 800;
+    static const  int SCREEN_W = 1400;
     static const unsigned char GRID_A = GRID_H*GRID_W;
 
     static const int map[GRID_A];
@@ -19,6 +19,8 @@ public:
 
 private:
     SDL_Window *window;
+
+
     SDL_Renderer *renderer;
 
 

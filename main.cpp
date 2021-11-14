@@ -1,6 +1,7 @@
 #include <iostream>
 #include "caster.h"
 
+
 using namespace std;
 
 int main()
@@ -9,9 +10,10 @@ int main()
 
     while(true){
         blaster.clr_scrn();
-        blaster.handle_pl();
         blaster.render_map();
+        blaster.handle_pl();
         blaster.cast_rays();
+
         blaster.sdl_present();
         if(blaster.quit_event() == false){
             break;
