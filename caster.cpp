@@ -102,6 +102,8 @@ void Caster::h_player()
 
 void Caster::cast_rays()
 {
+	//Start ray at half from FOV, aka start
+	//30 degrees since FOV is 60
     float ray_a = v_angle - 30 * deg;
     if(ray_a < 0){
         ray_a = 2 * M_PI;
@@ -110,18 +112,48 @@ void Caster::cast_rays()
         ray_a = 0;
     }
 
-    double a_y, a_x;
+    double r_y, r_x;
+    double y_a, x_a;
 
     if(ray_a > M_PI){
         std::cout << "UP" << std::endl;
-        a_y = (player.y/S_MAP) * (S_MAP) - 1;
+        r_y = (player.y/S_MAP) * (S_MAP) - 1;
+        y_a = -S_MAP;
     }
     if(ray_a < M_PI){
         std::cout << "DOWN" << std::endl;
-        a_y = (player.y/S_MAP) * (S_MAP) + S_MAP;
+        r_y = (player.y/S_MAP) * (S_MAP) + S_MAP;
+        y_a = S_MAP;
     }
 
-    a_x = player.x + (player.y - a_y)/tan(ray_a);
+    r_x = player.x + (player.y - r_y)/tan(ray_a);
+    
+    x_a = S_MAP/tan(ray_a);
+    
+    
+    bool hit = false;
+    
+    double ab_x, ab_y;
+    do{
+		
+		r_x += x_a;
+		r_y += y_a;
+		
+		int indeX = r_x / S_MAP;
+		int indeY = r_y / S_MAP;
+		
+		int arr_p = indeY*MAP_W+indeX;
+		
+		if(MAP[arr_p] == 1 && arr_p < MAP_A){
+			hit = true;
+		}
+	
+    }
+    while(!(hit));
+    SDL_SetRenderDrawColor(renderer,0,0,0,255);
+
+    SDL_RenderDrawLine(renderer,player.x,player.y,r_x,r_y);
+    
     /*
 
     double X_int, Y_int;
