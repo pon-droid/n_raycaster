@@ -1,44 +1,48 @@
 #ifndef CASTER_H
 #define CASTER_H
 
-#include <SDL.h>
-#include <math.h>
-#include <iostream>
+#include<SDL.h>
 
 class Caster
 {
 public:
-    //Loop
-    bool quit_event();
-    void sdl_present();
-    void clr_scrn();
-    //Core
     Caster();
-    const double deg = (M_PI / 180);
-
-    //SCREEN
+    //WINDOW
     SDL_Window *window;
     SDL_Renderer *renderer;
-    const int PLANE_W = 320;
-    const int PLANE_H = 200;
+    static const int SCREEN_W = 640;
+    static const int SCREEN_H = 480;
 
-    const int plane_d = (PLANE_W/2) / tan(30 * deg);
+    void clr_scrn();
+    void sdl_present();
+    bool quit_event();
+
     //MAP
-    const int S_MAP = 64;
-    const int MAP_W = 8;
-    const int MAP_H = 8;
-    const int MAP_A = MAP_W * MAP_H;
-    static const int MAP[64];
-    SDL_Rect WALL;
-    void draw_map();
-    //Player
-    SDL_Rect player = {160,100,32,32};
-    float delta_x = 1;
-    float delta_y = 1;
-    float v_angle = 0;
-    void h_player();
-    //Ray time
+    static const int MAP_W = 24;
+    static const int MAP_H = 24;
+    static const int MAP[MAP_W][MAP_H];
+    //Rays
+    double px = 22;
+    double py = 12;
+
+    double dir_x = -1;
+    double dir_y = 0;
+
+    double plane_x = 0;
+    double plane_y = .66; // 66 Degrees FOV
+
     void cast_rays();
+
+    //Interval sync
+    double del = 0;
+    double p_del = 0;
+
+    double m_speed;
+    double r_speed;
+
+    //Movement
+    void player();
+
 
 };
 
